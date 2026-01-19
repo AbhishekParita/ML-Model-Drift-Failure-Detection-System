@@ -1,0 +1,28 @@
+{
+  "drop_features": [
+    "nameOrig",
+    "nameDest"
+  ],
+  "categorical_features": [
+    "type"
+  ],
+  "encoded_columns": [
+    "type_CASH_OUT",
+    "type_DEBIT",
+    "type_PAYMENT",
+    "type_TRANSFER"
+  ],
+  "final_feature_order": [
+    "step",
+    "amount",
+    "oldbalanceOrg",
+    "newbalanceOrig",
+    "oldbalanceDest",
+    "newbalanceDest",
+    "isFlaggedFraud",
+    "type_CASH_OUT",
+    "type_DEBIT",
+    "type_PAYMENT",
+    "type_TRANSFER"
+  ]
+}

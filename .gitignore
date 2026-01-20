@@ -2,4 +2,12 @@ Adaptive Ml Model Drift & Failure Detection System — Technical Design.docx
 Adaptive Ml Model Drift & Failure Detection System — Technical Design.pdf
 PROJECT_PLAN.md
 venv
-database
+
+# Sensitive files with credentials
+app/db/database.py
+.env
+*.env
+*.key
+*.pem
+*.pkl
+config.ini

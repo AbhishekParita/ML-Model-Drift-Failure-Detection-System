@@ -8,3 +8,8 @@ scikit-learn
 scipy
 joblib
 xgboost==1.6.2
+matplotlib
+seaborn
+pydantic
+python-dotenv
+pyarrow

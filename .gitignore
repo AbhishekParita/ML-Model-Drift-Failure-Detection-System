@@ -11,3 +11,15 @@ app/db/database.py
 *.pem
 *.pkl
 config.ini
+
+# Large data files (> 100 MB)
+*.csv
+Fraud.csv
+*.parquet
+*.parq
+
+# Data directory
+data/
+datasets/
+*.xlsx
+Fraud.csv

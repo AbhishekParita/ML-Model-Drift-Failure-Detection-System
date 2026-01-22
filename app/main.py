@@ -18,7 +18,6 @@ class PredictionRequest(BaseModel):
     newbalanceOrig: float
     oldbalanceDest: float
     newbalanceDest: float
-    isFlaggedFraud: int
     type: str
 
 class PredictionResponse(BaseModel):

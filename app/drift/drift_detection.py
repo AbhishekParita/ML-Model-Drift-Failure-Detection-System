@@ -23,6 +23,15 @@ class DriftDetector:
         Returns:
             Dictionary with per-feature p-values and drift detection results
         """
+        # Align columns between reference and live data
+        common_cols = sorted(set(reference_df.columns) & set(live_df.columns))
+        
+        if not common_cols:
+            raise RuntimeError("No common columns between reference and live data")
+        
+        reference_df = reference_df[common_cols]
+        live_df = live_df[common_cols]
+        
         report = {}
         global_drift_count = 0
 
@@ -38,13 +47,13 @@ class DriftDetector:
 
             report[col] = {
                 "p_value": float(p_value),
-                "drift_detected": drift
+                "drift_detected": bool(drift)
             }
 
         report["summary"] = {
-            "total_features": len(reference_df.columns),
-            "drifted_features": global_drift_count,
-            "drift_ratio": global_drift_count / len(reference_df.columns)
+            "total_features": int(len(reference_df.columns)),
+            "drifted_features": int(global_drift_count),
+            "drift_ratio": float(global_drift_count / len(reference_df.columns))
         }
 
         return report

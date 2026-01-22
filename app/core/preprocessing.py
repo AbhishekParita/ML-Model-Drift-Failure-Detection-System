@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import numpy as np
 
-class Preprocessing:
+class Preprocessor:
     def __init__(self, schema_path: str):
         with open(schema_path) as f:
             self.schema = json.load(f)

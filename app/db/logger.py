@@ -5,23 +5,34 @@ def log_prediction(
         model_name: str,
         model_version: str,
         input_payload: dict,
-        fraud_probability: float,
-        predicted_label: int= None
+        prediction: int,
+        prediction_probability: float,
+        prediction_entropy: float
 ):
     conn = get_connection()
     cur = conn.cursor()
 
     cur.execute(
-        """ INSERT INTO model_predictions
-        (model_name, model_version, input_payload, fraud_probability, predicted_label)
-        VALUES(%s,%s,%s,%s,%s)
+        """ INSERT INTO model_predictions (
+            model_name,
+            model_version,
+            input_payload,
+            fraud_probability,
+            prediction,
+            prediction_probability,
+            prediction_entropy,
+            created_at
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
         """,
         (
             model_name,
             model_version,
             json.dumps(input_payload),
-            fraud_probability,
-            predicted_label
+            prediction_probability,
+            prediction,
+            prediction_probability,
+            prediction_entropy
         )
     )
 

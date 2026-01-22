@@ -1,7 +1,8 @@
 {
   "drop_features": [
     "nameOrig",
-    "nameDest"
+    "nameDest",
+    "isFlaggedFraud"
   ],
   "categorical_features": [
     "type"
@@ -19,7 +20,6 @@
     "newbalanceOrig",
     "oldbalanceDest",
     "newbalanceDest",
-    "isFlaggedFraud",
     "type_CASH_OUT",
     "type_DEBIT",
     "type_PAYMENT",

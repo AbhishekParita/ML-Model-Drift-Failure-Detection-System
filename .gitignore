@@ -29,3 +29,12 @@ test_alerts.py
 check_schema.py
 compute_baseline.py
 test_silent_shift.py
+AUDIT_REPORT.md
+create_behavior_alerts_table.py
+PROJECT_ERRORS.md
+PROJECT_SUMMARY.md
+QUICK_START.md
+REFERENCE.md
+STARTUP_GUIDE.md
+test_monitoring_pipeline.py
+tests

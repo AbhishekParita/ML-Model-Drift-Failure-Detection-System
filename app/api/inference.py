@@ -5,8 +5,8 @@ from app.db.logger import log_prediction
 from app.db.alert_logger import log_alert
 from app.monitoring.behaviour_monitor import evaluate_behaviour
 
-MODEL_PATH = "app\models/base_model.pkl"
-SCHEMA_PATH = "app\models/feature_schema.json"
+MODEL_PATH = "app/models/base_model.pkl"
+SCHEMA_PATH = "app/models/feature_schema.json"
 
 MODEL_NAME = "fraud_xgb"
 MODEL_VERSION = "v1.0"

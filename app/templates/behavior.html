@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Behavior Monitoring - ML Dashboard{% endblock %}
+
+{% block extra_style %}
+<style>
+    .stats-comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: #1E293B;
+        border: 1px solid #334155;
+        border-left: 4px solid #3B82F6;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .stat-card.recent {
+        border-left-color: #D97706;
+    }
+
+    .stat-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 12px;
+    }
+
+    .stat-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .stat-title {
+        font-size: 14px;
+        color: #94A3B8;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #E2E8F0;
+        margin-bottom: 10px;
+    }
+
+    .stat-detail {
+        font-size: 12px;
+        color: #94A3B8;
+    }
+
+    .threshold-indicator {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        margin-left: 10px;
+        vertical-align: middle;
+        white-space: nowrap;
+        min-width: 80px;
+        text-align: center;
+    }
+
+    .threshold-indicator.normal {
+        background: #374151;
+        color: #10B981;
+    }
+
+    .threshold-indicator.warning {
+        background: #374151;
+        color: #F59E0B;
+    }
+
+    .threshold-indicator.critical {
+        background: #374151;
+        color: #EF4444;
+    }
+
+    .distribution-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .distribution-table th {
+        background: #1E293B;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        color: #94A3B8;
+        border-bottom: 2px solid #334155;
+        font-size: 14px;
+    }
+
+    .distribution-table td {
+        padding: 12px;
+        border-bottom: 1px solid #334155;
+        font-size: 16px;
+        color: #E2E8F0;
+    }
+
+    .distribution-table tr:hover {
+        background: #334155;
+    }
+
+    .bar-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 150px;
+        margin: 20px 0;
+        padding: 20px;
+        background: #1E293B;
+        border-radius: 8px;
+        border: 1px solid #334155;
+        position: relative;
+    }
+
+    .chart-title {
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: #94A3B8;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .chart-axis-label {
+        font-size: 12px;
+        color: #94A3B8;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .bar {
+        flex: 1;
+        background: #3B82F6;
+        border-radius: 4px 4px 0 0;
+        min-width: 20px;
+        position: relative;
+    }
+
+    .bar:hover::after {
+        content: attr(data-count);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #0F172A;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .threshold-panel {
+        background: #1E293B;
+        border-left: 4px solid #3B82F6;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        border: 1px solid #334155;
+    }
+
+    .threshold-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 15px;
+    }
+
+    .threshold-item {
+        background: #0F172A;
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #334155;
+    }
+
+    .threshold-label {
+        font-size: 12px;
+        color: #94A3B8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 5px;
+    }
+
+    .threshold-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #E2E8F0;
+    }
+
+    .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #F1F5F9;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #334155;
+        padding-bottom: 10px;
+    }
+
+    .interpretation {
+        background: #1E293B;
+        border-left: 4px solid #10B981;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #10B981;
+        line-height: 1.6;
+    }
+
+    .interpretation.warning {
+        background: #1E293B;
+        border-left-color: #F59E0B;
+        color: #F59E0B;
+    }
+
+    .interpretation.critical {
+        background: #1E293B;
+        border-left-color: #EF4444;
+        color: #EF4444;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>📈 Prediction Behavior Monitoring</h1>
+<p style="color: #94A3B8; font-size: 16px; margin-bottom: 20px;">Is the model's output distribution still sane?</p>
+
+<!-- Baseline vs Recent Comparison -->
+<div class="stats-comparison">
+    <div class="stat-card">
+        <div class="stat-title">📊 Baseline Statistics</div>
+        <div style="margin-bottom: 15px;">
+            <div>
+                <strong>Mean Probability:</strong>
+                <span class="stat-value">{{ "%.4f" % data.baseline_stats.mean_probability }}</span>
+            </div>
+            <div>
+                <strong>Std Deviation:</strong>
+                <span>{{ "%.4f" % data.baseline_stats.std_probability }}</span>
+            </div>
+            <div>
+                <strong>High Risk Ratio:</strong>
+                <span>{{ "%.2f" % (data.baseline_stats.high_risk_ratio * 100) }}%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card recent">
+        <div class="stat-title">📊 Recent Statistics</div>
+        
+        <div class="stat-row">
+            <div class="stat-content">
+                <div><strong>Mean Probability:</strong> <span class="stat-value">{{ "%.4f" % data.recent_stats.mean_probability }}</span></div>
+            </div>
+            <div>
+                {% set mean_delta = (data.recent_stats.mean_probability - data.baseline_stats.mean_probability) | abs %}
+                {% if mean_delta > data.baseline_stats.std_probability %}
+                    <span class="threshold-indicator critical">⚠ ALERT</span>
+                {% elif mean_delta > data.baseline_stats.std_probability * 0.5 %}
+                    <span class="threshold-indicator warning">⚠ WARNING</span>
+                {% else %}
+                    <span class="threshold-indicator normal">✓ NORMAL</span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="stat-row">
+            <div class="stat-content">
+                <div><strong>Std Deviation:</strong> <span>{{ "%.4f" % data.recent_stats.std_probability }}</span></div>
+            </div>
+            <div></div>
+        </div>
+        
+        <div class="stat-row">
+            <div class="stat-content">
+                <div><strong>High Risk Ratio:</strong> <span>{{ "%.2f" % (data.recent_stats.high_risk_ratio * 100) }}%</span></div>
+            </div>
+            <div>
+                {% if data.recent_stats.high_risk_ratio > data.thresholds.high_risk_upper %}
+                    <span class="threshold-indicator critical">⚠ ALERT</span>
+                {% elif data.recent_stats.high_risk_ratio > data.baseline_stats.high_risk_ratio * 1.2 %}
+                    <span class="threshold-indicator warning">⚠ WARNING</span>
+                {% else %}
+                    <span class="threshold-indicator normal">✓ NORMAL</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thresholds -->
+<div class="section-title">🎯 Active Thresholds</div>
+<div class="threshold-panel">
+    <div class="threshold-row">
+        <div class="threshold-item">
+            <div class="threshold-label">Mean Shift Alert</div>
+            <div class="threshold-value">{{ "%.4f" % data.baseline_stats.std_probability }}</div>
+            <div style="font-size: 12px; color: #999; margin-top: 5px;">Deviation beyond 1σ</div>
+        </div>
+        <div class="threshold-item">
+            <div class="threshold-label">High Risk Upper Threshold</div>
+            <div class="threshold-value">{{ "%.2f" % (data.thresholds.high_risk_upper * 100) }}%</div>
+            <div style="font-size: 12px; color: #999; margin-top: 5px;">Current: {{ "%.2f" % (data.recent_stats.high_risk_ratio * 100) }}%</div>
+        </div>
+    </div>
+    <div class="threshold-row">
+        <div class="threshold-item">
+            <div class="threshold-label">High Risk Lower Threshold</div>
+            <div class="threshold-value">{{ "%.2f" % (data.thresholds.high_risk_lower * 100) }}%</div>
+        </div>
+        <div class="threshold-item">
+            <div class="threshold-label">Multiplier</div>
+            <div class="threshold-value">{{ data.thresholds.mean_shift_std_multiplier }}σ</div>
+        </div>
+    </div>
+</div>
+
+<!-- Probability Distribution -->
+<div class="section-title">📊 Fraud Probability Distribution</div>
+{% if data.distribution_snapshot.histogram_counts | length > 0 %}
+<table class="distribution-table">
+    <thead>
+        <tr>
+            <th>Range</th>
+            <th>Count</th>
+            <th>Frequency</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set total_count = data.distribution_snapshot.histogram_counts | sum %}
+        {% for i in range(data.distribution_snapshot.histogram_counts | length) %}
+        <tr>
+            <td>
+                {{ "%.1f" % data.distribution_snapshot.histogram_bins[i] }} - {{ "%.1f" % data.distribution_snapshot.histogram_bins[i+1] }}
+            </td>
+            <td><strong>{{ data.distribution_snapshot.histogram_counts[i] }}</strong></td>
+            <td>{{ "%.1f" % ((data.distribution_snapshot.histogram_counts[i] / total_count * 100)) }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="chart-title">Prediction Distribution Across Probability Ranges</div>
+<div class="bar-chart">
+    {% for count in data.distribution_snapshot.histogram_counts %}
+        {% set max_count = data.distribution_snapshot.histogram_counts | max %}
+        {% set height = (count / max_count * 100) if max_count > 0 else 0 %}
+        <div class="bar" style="height: {{ height }}%;" data-count="{{ count }}"></div>
+    {% endfor %}
+</div>
+<div class="chart-axis-label">Fraud Probability Range (0.0 → 1.0)</div>
+{% else %}
+<div class="interpretation">
+    No distribution data available yet.
+</div>
+{% endif %}
+
+<!-- Interpretation -->
+<div class="section-title">💡 Interpretation</div>
+{% set mean_delta = (data.recent_stats.mean_probability - data.baseline_stats.mean_probability) | abs %}
+{% if mean_delta > data.baseline_stats.std_probability %}
+    <div class="interpretation critical">
+        ⚠️ <strong>Mean probability has shifted significantly!</strong><br>
+        Recent mean ({{ "%.4f" % data.recent_stats.mean_probability }}) deviates by {{ "%.4f" % mean_delta }} from baseline, exceeding the threshold of {{ "%.4f" % data.baseline_stats.std_probability }}.
+    </div>
+{% elif data.recent_stats.high_risk_ratio > data.thresholds.high_risk_upper %}
+    <div class="interpretation warning">
+        ⚠️ <strong>High-risk ratio spike detected!</strong><br>
+        Recent high-risk ratio ({{ "%.2f" % (data.recent_stats.high_risk_ratio * 100) }}%) exceeds upper threshold ({{ "%.2f" % (data.thresholds.high_risk_upper * 100) }}%).
+    </div>
+{% else %}
+    <div class="interpretation">
+        ✓ <strong>Model behavior is within normal parameters.</strong><br>
+        Mean probability and risk ratio are stable relative to baseline.
+    </div>
+{% endif %}
+
+{% endblock %}

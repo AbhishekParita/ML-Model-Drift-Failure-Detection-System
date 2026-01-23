@@ -6,7 +6,7 @@ def load_recent(limit = 500):
 
     query = """ 
     SELECT input_payload
-    FROM model_predicitions
+    FROM model_predictions
     ORDER BY created_at DESC
     LIMIT %s
     """

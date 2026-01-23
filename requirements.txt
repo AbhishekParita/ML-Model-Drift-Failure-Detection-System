@@ -13,3 +13,5 @@ seaborn
 pydantic
 python-dotenv
 pyarrow
+Jinja2
+requests

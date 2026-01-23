@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ML Monitoring Dashboard{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0F172A;
+            color: #E2E8F0;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #1E293B;
+            padding: 20px 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            border-bottom: 1px solid #334155;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #F1F5F9;
+        }
+
+        .nav {
+            background: #1E293B;
+            padding: 0 40px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            padding: 16px 24px;
+            text-decoration: none;
+            color: #94A3B8;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav a:hover {
+            color: #E2E8F0;
+            background: #334155;
+        }
+
+        .nav a.active {
+            color: #60A5FA;
+            border-bottom-color: #60A5FA;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #F1F5F9;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94A3B8;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #1E293B;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #334155;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .status-healthy {
+            color: #10B981;
+            background: #1E293B;
+            border-color: #10B981;
+        }
+
+        .status-warning {
+            color: #F59E0B;
+            background: #1E293B;
+            border-color: #F59E0B;
+        }
+
+        .status-critical {
+            color: #EF4444;
+            background: #1E293B;
+            border-color: #EF4444;
+        }
+
+        .status-info {
+            color: #3B82F6;
+            background: #1E293B;
+            border-color: #3B82F6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #1E293B;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #94A3B8;
+            border-bottom: 2px solid #334155;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+            color: #E2E8F0;
+        }
+
+        tr:hover {
+            background: #334155;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #94A3B8;
+            font-size: 13px;
+            border-top: 1px solid #334155;
+            background: #1E293B;
+            margin-top: 40px;
+        }
+
+        {% block extra_style %}{% endblock %}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ML Drift Detection System</h1>
+    </div>
+
+    <nav class="nav">
+        <a href="/" class="{% if page == 'overview' %}active{% endif %}">Overview</a>
+        <a href="/dashboard/behavior" class="{% if page == 'behavior' %}active{% endif %}">Behavior Monitoring</a>
+        <a href="/dashboard/drift" class="{% if page == 'drift' %}active{% endif %}">Data Drift</a>
+        <a href="/dashboard/alerts" class="{% if page == 'alerts' %}active{% endif %}">Alerts Timeline</a>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="footer">
+        ML Drift Detection System | Last updated: {{ current_time }}
+    </div>
+</body>
+</html>

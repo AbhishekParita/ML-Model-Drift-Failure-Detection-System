@@ -212,10 +212,8 @@ This project is licensed under the MIT License.
 
 ## 👤 Author
 
-**Your Name**  
-📧 Email: your.email@example.com  
-💼 LinkedIn: [your-linkedin](https://linkedin.com/in/your-profile)  
-🐙 GitHub: [your-github](https://github.com/your-username)
+**ABHISHEK PARITA**  
+📧 Email: abhishek13parita25@gmail.com  
 
 ---
 
